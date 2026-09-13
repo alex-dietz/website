@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import Footnote from '../components/Footnote.astro';
+import LinkIndex from '../components/LinkIndex.astro';
+import Rule from '../components/Rule.astro';
+import { site, tagline, rows } from '../data/site';
+
+// Footnote numbering runs continuously: tagline first, then down the index.
+let counter = 0;
+const taglineParts = tagline.map((part) => ({
+  text: part.text,
+  note: 'note' in part ? part.note : undefined,
+  n: 'note' in part && part.note ? ++counter : 0,
+}));
+const numberedRows = rows.map((row) => ({
+  label: row.label,
+  items: row.items.map((item) => ({ ...item, n: item.note ? ++counter : 0 })),
+}));
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.name}</title>
+    <meta name="description" content={site.description} />
+    <link rel="canonical" href={`https://${site.domain}/`} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={site.name} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:url" content={`https://${site.domain}/`} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+
+  <body>
+    <!--
+       ┌───────────────────────────────────────────────┐
+       │   A few things on this page are hidden.       │
+       │                                               │
+       │   Drag the rule under the name.               │
+       │   Then type: lapin                            │
+       └───────────────────────────────────────────────┘
+    -->
+
+    <div class="page">
+      <main class="sheet">
+        <h1 class="name reveal" style="--i:0"><span data-review="name">{site.name}</span></h1>
+
+        <Rule />
+
+        <p class="tagline reveal" style="--i:1">
+          <span data-review="tagline">{
+            taglineParts.map((part) =>
+              part.note && part.n > 0 ? (
+                <Footnote text={part.text} note={part.note} n={part.n} />
+              ) : (
+                <span>{part.text}</span>
+              )
+            )
+          }</span>
+        </p>
+
+        <div class="reveal" style="--i:2; height:1.75rem" aria-hidden="true"></div>
+
+        <LinkIndex rows={numberedRows} />
+      </main>
+
+      <footer class="footer reveal" style="--i:8">
+        <span id="greeting">&nbsp;</span>
+      </footer>
+    </div>
+
+    <script>
+      import '../scripts/eggs';
+    </script>
+  </body>
+</html>

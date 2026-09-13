@@ -1,0 +1,781 @@
+@import '@fontsource-variable/newsreader';
+@import '@fontsource-variable/newsreader/wght-italic.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Tokens
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --paper: #faf7f2;
+  --paper-tint: #f2ede4;
+  --ink: #17150f;
+  --ink-soft: #6f675a;
+  --ink-faint: #a49b8c;
+  --rule: #ddd6c8;
+  --accent: #9c2c14;
+  --delft: #2b4b9b;
+
+  --serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --measure: 34rem;
+  --step: clamp(1rem, 0.6rem + 1.6vw, 1.5rem);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --grain: 0.035;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #100f0d;
+    --paper-tint: #191713;
+    --ink: #ece7dc;
+    --ink-soft: #918978;
+    --ink-faint: #5d564a;
+    --rule: #302c25;
+    --accent: #e0674a;
+    --delft: #6f8fd8;
+    --grain: 0.055;
+  }
+}
+
+/* Explicit override wins over the media query in both directions. */
+:root[data-theme='light'] {
+  --paper: #faf7f2;
+  --paper-tint: #f2ede4;
+  --ink: #17150f;
+  --ink-soft: #6f675a;
+  --ink-faint: #a49b8c;
+  --rule: #ddd6c8;
+  --accent: #9c2c14;
+  --delft: #2b4b9b;
+  --grain: 0.035;
+}
+
+:root[data-theme='dark'] {
+  --paper: #100f0d;
+  --paper-tint: #191713;
+  --ink: #ece7dc;
+  --ink-soft: #918978;
+  --ink-faint: #5d564a;
+  --rule: #302c25;
+  --accent: #e0674a;
+  --delft: #6f8fd8;
+  --grain: 0.055;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Base
+   ══════════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  font-variation-settings: 'opsz' 16;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
+}
+
+/* Paper grain. Pure CSS, no asset request. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-color-scheme: dark) {
+  body::before {
+    mix-blend-mode: screen;
+  }
+}
+
+:root[data-theme='dark'] body::before {
+  mix-blend-mode: screen;
+}
+
+:root[data-theme='light'] body::before {
+  mix-blend-mode: multiply;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Layout
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: clamp(2rem, 8vh, 6rem) var(--step);
+}
+
+.sheet {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  align-self: center;
+}
+
+/* Staggered page load. One orchestrated moment, not scattered fidgets. */
+.reveal {
+  opacity: 0;
+  transform: translateY(0.6rem);
+  animation: rise 0.9s var(--ease) forwards;
+  animation-delay: calc(var(--i, 0) * 90ms + 120ms);
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Masthead
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.name {
+  margin: 0;
+  font-size: clamp(2.75rem, 1.8rem + 4.4vw, 4.75rem);
+  font-variation-settings: 'opsz' 44;
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  cursor: default;
+}
+
+.tagline {
+  margin: 1rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1.05em;
+  font-style: italic;
+  font-variation-settings: 'opsz' 18;
+  text-wrap: pretty;
+}
+
+/* ── The rule. Draggable; see eggs.ts ─────────────────────────────────────── */
+
+.rule {
+  --shift: 0px;
+  display: block;
+  width: 100%;
+  height: 1.5rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: grab;
+  touch-action: pan-y;
+  position: relative;
+}
+
+.rule:active {
+  cursor: grabbing;
+}
+
+.rule::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--rule);
+  transform: translateY(-50%);
+  transition: background-color 0.4s var(--ease);
+}
+
+.rule:hover::before,
+.rule:focus-visible::before {
+  background: var(--accent);
+}
+
+/* A whisper of an affordance — only on hover, never shouting. */
+.rule::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(50% + var(--shift));
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s var(--ease), left 0.7s cubic-bezier(0.16, 1.4, 0.3, 1);
+}
+
+.rule--dragging::after {
+  transition: opacity 0.3s var(--ease);
+}
+
+.rule:hover::after,
+.rule:focus-visible::after,
+.rule--dragging::after {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Index
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.index {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0 1.5rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+}
+
+.row + .row {
+  border-top: 1px solid color-mix(in oklab, var(--rule) 55%, transparent);
+}
+
+.row__label {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-top: 0.42em;
+}
+
+.row__items {
+  margin: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.entry {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.15rem 0;
+  transition: color 0.25s var(--ease);
+}
+
+.entry__name {
+  font-size: 1.06em;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.4s var(--ease);
+}
+
+.entry:hover .entry__name,
+.entry:focus-visible .entry__name {
+  background-size: 100% 1px;
+}
+
+.entry:hover,
+.entry:focus-visible {
+  color: var(--accent);
+}
+
+.entry__meta {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* Parked outside the flow so it never pushes the footnote marker away. */
+.entry__arrow {
+  position: absolute;
+  left: 100%;
+  top: 0.28em;
+  margin-left: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.75em;
+  color: var(--ink-faint);
+  transform: translate(-3px, 0);
+  opacity: 0;
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+
+.entry:hover .entry__arrow,
+.entry:focus-visible .entry__arrow {
+  opacity: 1;
+  transform: none;
+  color: var(--accent);
+}
+
+@media (max-width: 34rem) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  .row__label {
+    padding-top: 0.3em;
+  }
+
+  .entry__meta {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Footnotes
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.fn {
+  font: inherit;
+  font-style: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: help;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: color-mix(in oklab, var(--ink-faint) 70%, transparent);
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+.fn:hover,
+.fn[aria-expanded='true'] {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.fn__marker {
+  font-family: var(--mono);
+  font-size: 0.6em;
+  font-style: normal;
+  vertical-align: super;
+  letter-spacing: 0;
+  margin-left: 0.1em;
+  color: var(--accent);
+}
+
+.fn--bare {
+  text-decoration: none;
+  cursor: help;
+}
+
+.fn__note {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  max-width: 22rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--paper-tint);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent);
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-style: normal;
+  font-size: 0.8125rem;
+  font-variation-settings: 'opsz' 14;
+  line-height: 1.5;
+  text-wrap: pretty;
+  box-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.35);
+  opacity: 0;
+  transform: translateY(-0.25rem);
+  transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+  pointer-events: none;
+}
+
+.fn__note[data-open='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Footer
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.footer {
+  max-width: var(--measure);
+  margin: 4rem auto 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Easter egg — typographic eras (drag the rule)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root[data-era='letterpress'] {
+  --paper: #f2e9d8;
+  --paper-tint: #e9dec8;
+  --ink: #100c06;
+  --rule: #c3b393;
+}
+
+:root[data-era='letterpress'] body {
+  --grain: 0.09;
+}
+
+:root[data-era='letterpress'] .name {
+  font-variation-settings: 'opsz' 72;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 1.2rem + 3.6vw, 3.5rem);
+}
+
+:root[data-era='letterpress'] .tagline {
+  font-variant: small-caps;
+  font-style: normal;
+  letter-spacing: 0.06em;
+}
+
+:root[data-era='1996'] {
+  --paper: #c0c0c0;
+  --paper-tint: #d4d0c8;
+  --ink: #000;
+  --ink-soft: #000;
+  --ink-faint: #000;
+  --rule: #808080;
+  --accent: #0000ee;
+  --grain: 0;
+}
+
+:root[data-era='1996'] body {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+:root[data-era='1996'] .name {
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+:root[data-era='1996'] .sheet {
+  max-width: none;
+}
+
+:root[data-era='1996'] .entry__name {
+  color: #0000ee;
+  text-decoration: underline;
+  background: none;
+}
+
+:root[data-era='1996'] .row__label,
+:root[data-era='1996'] .entry__meta,
+:root[data-era='1996'] .footer {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Easter egg — peer review mode
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.review-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.review-note {
+  position: absolute;
+  max-width: 13rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--accent);
+  opacity: 0;
+  transform: rotate(-1.4deg) translateY(0.35rem);
+  animation: penIn 0.5s var(--ease) forwards;
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+
+.review-note::before {
+  content: '';
+  position: absolute;
+  top: 0.55em;
+  left: -1.6rem;
+  width: 1.3rem;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.review-note--left {
+  text-align: right;
+  transform: rotate(1.1deg) translateY(0.35rem);
+}
+
+.review-note--left::before {
+  left: auto;
+  right: -1.6rem;
+}
+
+@keyframes penIn {
+  to {
+    opacity: 1;
+    transform: rotate(-1.4deg);
+  }
+}
+
+.review-mark {
+  position: absolute;
+  pointer-events: none;
+  color: var(--accent);
+}
+
+.review-mark--squiggle {
+  border-bottom: 2px solid var(--accent);
+  border-radius: 0 0 40% 40% / 0 0 100% 100%;
+  opacity: 0.75;
+}
+
+.review-mark--strike {
+  border-top: 2px solid var(--accent);
+  opacity: 0.8;
+}
+
+.review-mark--circle {
+  border: 2px solid var(--accent);
+  border-radius: 46% 54% 50% 50% / 58% 42% 58% 42%;
+  opacity: 0.6;
+  transform: rotate(-1deg);
+}
+
+.review-stamp {
+  position: fixed;
+  right: clamp(1rem, 5vw, 4rem);
+  bottom: clamp(1.5rem, 8vh, 5rem);
+  z-index: 50;
+  padding: 0.5rem 1rem;
+  border: 3px double var(--accent);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: clamp(0.75rem, 0.6rem + 0.6vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transform: rotate(-9deg) scale(1.6);
+  opacity: 0;
+  animation: stamp 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) 0.9s forwards;
+  pointer-events: none;
+}
+
+@keyframes stamp {
+  to {
+    opacity: 0.9;
+    transform: rotate(-9deg) scale(1);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Easter egg — toasts, delft wash, the rabbit
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2.5rem;
+  z-index: 70;
+  translate: -50% 0;
+  padding: 0.6rem 1.1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  animation: toast 2.6s var(--ease) forwards;
+  pointer-events: none;
+}
+
+@keyframes toast {
+  12% {
+    opacity: 1;
+    translate: -50% -0.4rem;
+  }
+  78% {
+    opacity: 1;
+    translate: -50% -0.4rem;
+  }
+  100% {
+    opacity: 0;
+    translate: -50% -0.4rem;
+  }
+}
+
+.delft-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  opacity: 0;
+  animation: wash 3s var(--ease) forwards;
+  background-color: color-mix(in oklab, var(--delft) 16%, transparent);
+  background-image: radial-gradient(circle at 50% 50%, var(--delft) 1.5px, transparent 1.6px),
+    radial-gradient(circle at 0 0, var(--delft) 1.5px, transparent 1.6px),
+    radial-gradient(circle at 100% 100%, var(--delft) 1.5px, transparent 1.6px);
+  background-size: 48px 48px;
+}
+
+@keyframes wash {
+  20% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.rabbit {
+  position: fixed;
+  bottom: 1.5rem;
+  left: -80px;
+  z-index: 65;
+  width: 46px;
+  color: var(--ink);
+  pointer-events: none;
+  animation: lope 6.5s linear forwards;
+}
+
+.rabbit__body {
+  animation: hop 0.42s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.rabbit__ear {
+  animation: earflick 0.42s ease-in-out infinite;
+  transform-origin: 60% 90%;
+}
+
+@keyframes lope {
+  to {
+    left: calc(100% + 90px);
+  }
+}
+
+@keyframes hop {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  35% {
+    transform: translateY(-15px) scaleY(1.06);
+  }
+  70% {
+    transform: translateY(0) scaleY(0.94);
+  }
+}
+
+@keyframes earflick {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(-16deg);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Reduced motion
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rabbit {
+    animation: fadeOnly 4s linear forwards;
+    left: 50%;
+  }
+
+  @keyframes fadeOnly {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    20%,
+    80% {
+      opacity: 1;
+    }
+  }
+}

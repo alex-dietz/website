@@ -1,0 +1,32 @@
+---
+interface Props {
+  /** Visible text the note attaches to. Omit for a bare superscript marker. */
+  text?: string;
+  note: string;
+  n: number;
+}
+
+const { text, note, n } = Astro.props;
+const id = `fn-${n}`;
+---
+
+{
+  text ? (
+    <button class="fn" type="button" aria-expanded="false" aria-describedby={id} data-fn={n}>
+      {text}
+      <span class="fn__marker" aria-hidden="true">{n}</span>
+    </button>
+  ) : (
+    <button
+      class="fn fn--bare"
+      type="button"
+      aria-expanded="false"
+      aria-describedby={id}
+      aria-label={`Footnote ${n}`}
+      data-fn={n}
+    >
+      <span class="fn__marker" aria-hidden="true">{n}</span>
+    </button>
+  )
+}
+<span class="fn__note" id={id} role="note" data-open="false" data-fn-note={n}>{note}</span>

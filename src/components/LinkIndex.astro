@@ -1,0 +1,55 @@
+---
+import Footnote from './Footnote.astro';
+import type { IndexItem } from '../data/site';
+
+interface NumberedItem extends IndexItem {
+  n: number;
+}
+
+interface Props {
+  rows: { label: string; items: NumberedItem[] }[];
+}
+
+const { rows } = Astro.props;
+---
+
+<dl class="index">
+  {
+    rows.map((row, i) => (
+      <div class="row reveal" style={`--i:${i + 3}`}>
+        <dt class="row__label">{row.label}</dt>
+        <dd class="row__items">
+          {row.items.map((item) => (
+            <span class="entry-line">
+              <a
+                class="entry"
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer me"
+              >
+                <span class="entry__name" data-review={item.name}>
+                  {item.name}
+                </span>
+                {item.meta && <span class="entry__meta">{item.meta}</span>}
+                <span class="entry__arrow" aria-hidden="true">
+                  &#8599;
+                </span>
+              </a>
+              {item.note && item.n > 0 && <Footnote n={item.n} note={item.note} />}
+            </span>
+          ))}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .entry-line {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.05rem;
+    width: fit-content;
+  }
+</style>
