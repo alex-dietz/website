@@ -42,7 +42,6 @@ Layered so the page stays calm for someone who just wants the links.
 **Tier 1 — free**
 - A message in the devtools console
 - A note in the HTML source
-- The footer greeting changes with the time of day
 
 **Tier 2 — mild curiosity**
 - Superscript footnotes on the tagline and index entries, opening as margin notes
@@ -52,8 +51,7 @@ Layered so the page stays calm for someone who just wants the links.
 **Tier 3 — deliberate hunting**
 - Konami code (`↑↑↓↓←→←→BA`) → **peer review mode**: the page annotates itself with red-pen
   margin comments and a MAJOR REVISIONS stamp. Press again to withdraw.
-- Type anywhere: `mun` (gavel + "Motion carried"), `sudo`, `delft`, `lapin` (a rabbit crosses
-  the page — LAPIN is French for rabbit)
+- Type anywhere: `mun` (gavel + "Motion carried"), `sudo`, `delft`
 
 Every animation respects `prefers-reduced-motion`. Nothing is required to use the page.
 

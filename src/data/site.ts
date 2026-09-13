@@ -38,7 +38,7 @@ export const rows: IndexRow[] = [
       {
         name: 'LAPIN',
         href: 'https://health.ec.europa.eu/non-communicable-diseases/cancer/europes-beating-cancer-plan-eu4health-financed-projects/projects/lapin_en',
-        note: 'Lung cancer screening And Prevention INternationally. Also French for “rabbit”.',
+        note: 'Lung cancer screening And Prevention INternationally. An EU4Health project under Europe’s Beating Cancer Plan.',
       },
     ],
   },
@@ -49,18 +49,18 @@ export const rows: IndexRow[] = [
         name: 'mymun',
         href: 'https://mymun.com',
         meta: 'Model UN, at scale',
-        note: 'The world’s largest platform for Model UN conferences. Started it because finding a conference to attend was harder than it should have been.',
+        note: 'The world’s largest platform for Model UN conferences.',
       },
     ],
   },
   {
-    label: 'Involved',
+    label: 'Volunteering',
     items: [
       {
         name: 'German American Conference',
         href: 'https://germanamericanconference.org/',
         meta: 'Harvard',
-        note: 'The largest student-led conference on transatlantic relations. Running since 2008.',
+        note: 'The largest student-led conference on transatlantic relations.',
       },
       {
         name: 'Aurel Steinert Stiftung',

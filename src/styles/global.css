@@ -446,25 +446,6 @@ a {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Footer
-   ══════════════════════════════════════════════════════════════════════════ */
-
-.footer {
-  max-width: var(--measure);
-  margin: 4rem auto 0;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  justify-content: space-between;
-  align-items: baseline;
-  font-family: var(--mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.05em;
-  color: var(--ink-faint);
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
    Easter egg — typographic eras (drag the rule)
    ══════════════════════════════════════════════════════════════════════════ */
 
@@ -525,8 +506,7 @@ a {
 }
 
 :root[data-era='1996'] .row__label,
-:root[data-era='1996'] .entry__meta,
-:root[data-era='1996'] .footer {
+:root[data-era='1996'] .entry__meta {
   font-family: 'Courier New', Courier, monospace;
 }
 
@@ -633,7 +613,7 @@ a {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Easter egg — toasts, delft wash, the rabbit
+   Easter egg — toasts, delft wash
    ══════════════════════════════════════════════════════════════════════════ */
 
 .toast {
@@ -694,56 +674,6 @@ a {
   }
 }
 
-.rabbit {
-  position: fixed;
-  bottom: 1.5rem;
-  left: -80px;
-  z-index: 65;
-  width: 46px;
-  color: var(--ink);
-  pointer-events: none;
-  animation: lope 6.5s linear forwards;
-}
-
-.rabbit__body {
-  animation: hop 0.42s ease-in-out infinite;
-  transform-origin: 50% 100%;
-}
-
-.rabbit__ear {
-  animation: earflick 0.42s ease-in-out infinite;
-  transform-origin: 60% 90%;
-}
-
-@keyframes lope {
-  to {
-    left: calc(100% + 90px);
-  }
-}
-
-@keyframes hop {
-  0%,
-  100% {
-    transform: translateY(0) scaleY(1);
-  }
-  35% {
-    transform: translateY(-15px) scaleY(1.06);
-  }
-  70% {
-    transform: translateY(0) scaleY(0.94);
-  }
-}
-
-@keyframes earflick {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  40% {
-    transform: rotate(-16deg);
-  }
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
    Reduced motion
    ══════════════════════════════════════════════════════════════════════════ */
@@ -763,19 +693,4 @@ a {
     transform: none;
   }
 
-  .rabbit {
-    animation: fadeOnly 4s linear forwards;
-    left: 50%;
-  }
-
-  @keyframes fadeOnly {
-    0%,
-    100% {
-      opacity: 0;
-    }
-    20%,
-    80% {
-      opacity: 1;
-    }
-  }
 }

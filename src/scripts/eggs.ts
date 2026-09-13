@@ -12,28 +12,9 @@ function consoleNote() {
   console.log('%cAlexander Dietz — alexanderdietz.eu', head);
   console.log(
     '%cA few things on this page are hidden.\n' +
-      'Drag the rule under the name. Then type: lapin',
+      'Drag the rule under the name.',
     body
   );
-}
-
-function greeting() {
-  const el = document.getElementById('greeting');
-  if (!el) return;
-  const h = new Date().getHours();
-  const line =
-    h < 5
-      ? 'you are up very late'
-      : h < 9
-        ? 'early start'
-        : h < 12
-          ? 'good morning'
-          : h < 18
-            ? 'good afternoon'
-            : h < 23
-              ? 'good evening'
-              : 'you are up very late';
-  el.textContent = line;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -343,28 +324,6 @@ function delftWash() {
   setTimeout(() => el.remove(), 3200);
 }
 
-const RABBIT_SVG = `
-<svg class="rabbit" viewBox="0 0 60 52" fill="none" aria-hidden="true">
-  <g class="rabbit__body" fill="currentColor">
-    <ellipse cx="30" cy="36" rx="17" ry="12"/>
-    <circle cx="45" cy="26" r="9"/>
-    <g class="rabbit__ear">
-      <ellipse cx="46" cy="11" rx="3.4" ry="10" transform="rotate(9 46 11)"/>
-      <ellipse cx="39" cy="13" rx="3.2" ry="9.5" transform="rotate(-11 39 13)"/>
-    </g>
-    <circle cx="12" cy="33" r="6"/>
-  </g>
-</svg>`;
-
-function rabbit() {
-  const wrap = document.createElement('div');
-  wrap.innerHTML = RABBIT_SVG.trim();
-  const svg = wrap.firstElementChild as SVGElement | null;
-  if (!svg) return;
-  document.body.appendChild(svg);
-  setTimeout(() => svg.remove(), reduceMotion ? 4200 : 6800);
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
    Input plumbing
    ══════════════════════════════════════════════════════════════════════════ */
@@ -391,10 +350,6 @@ const WORDS: Record<string, () => void> = {
   delft: () => {
     delftWash();
     toast('Engineering & Policy Analysis. Good years.');
-  },
-  lapin: () => {
-    rabbit();
-    toast('Lung cancer screening And Prevention INternationally. Also: rabbit.');
   },
 };
 
@@ -435,7 +390,6 @@ function keyboard() {
 /* ══════════════════════════════════════════════════════════════════════════ */
 
 consoleNote();
-greeting();
 footnotes();
 draggableRule();
 keyboard();
