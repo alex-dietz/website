@@ -82,14 +82,22 @@ function footnotes() {
   }
 
   buttons.forEach((btn) => {
-    btn.addEventListener('pointerenter', (e) => {
+    // In the tagline the marker sits inside the .fn button alongside its text, so
+    // the button is already the whole phrase. Index entries render a bare marker
+    // next to the link, so widen the target to the entry line — hovering the name
+    // should open the note, not just hovering the superscript.
+    const host: HTMLElement = btn.closest<HTMLElement>('.entry-line') ?? btn;
+
+    host.addEventListener('pointerenter', (e) => {
       if (e.pointerType === 'mouse') show(btn);
     });
-    btn.addEventListener('pointerleave', (e) => {
+    host.addEventListener('pointerleave', (e) => {
       if (e.pointerType === 'mouse') hide(btn);
     });
-    btn.addEventListener('focus', () => show(btn));
-    btn.addEventListener('blur', () => hide(btn));
+    // focusin/focusout rather than focus/blur: they bubble, so tabbing to the
+    // entry's link reveals the note the same way the marker does.
+    host.addEventListener('focusin', () => show(btn));
+    host.addEventListener('focusout', () => hide(btn));
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       btn.getAttribute('aria-expanded') === 'true' ? hide(btn) : show(btn);
