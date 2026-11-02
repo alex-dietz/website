@@ -1,9 +1,8 @@
 # alexanderdietz.eu
 
-A one-page landing site. Minimal editorial on the surface, with easter eggs layered underneath.
+A one-page personal site.
 
-Built with [Astro](https://astro.build). Static output, no client framework — the only JavaScript
-shipped is the easter-egg module (~8 kB, 3.4 kB gzipped).
+Built with [Astro](https://astro.build). Static output, no client-side JavaScript.
 
 ## Develop
 
@@ -23,37 +22,12 @@ All copy and links live in `src/data/site.ts`. Edit that, not the markup.
 ```
 src/
 ├── pages/index.astro        the page
-├── components/
-│   ├── Footnote.astro       superscript marker + margin note
-│   ├── LinkIndex.astro      the masthead-style link index
-│   └── Rule.astro           the draggable rule under the name
 ├── data/site.ts             all content
-├── scripts/eggs.ts          every interactive easter egg
-└── styles/global.css        tokens, layout, egg styling
+└── styles/global.css        all styling (Inter, white background)
 public/
 ├── CNAME                    alexanderdietz.eu
 └── favicon.svg
 ```
-
-## The easter eggs
-
-Layered so the page stays calm for someone who just wants the links.
-
-**Tier 1 — free**
-- A message in the devtools console
-- A note in the HTML source
-
-**Tier 2 — mild curiosity**
-- Superscript footnotes on the tagline and index entries, opening as margin notes
-- The rule under the name is a slider. Drag it (or focus it and use arrow keys):
-  left → letterpress, right → the web circa 1996. Springs back on release.
-
-**Tier 3 — deliberate hunting**
-- Konami code (`↑↑↓↓←→←→BA`) → **peer review mode**: the page annotates itself with red-pen
-  margin comments and a MAJOR REVISIONS stamp. Press again to withdraw.
-- Type anywhere: `mun` (gavel + "Motion carried"), `sudo`, `delft`
-
-Every animation respects `prefers-reduced-motion`. Nothing is required to use the page.
 
 ## Deploy
 
