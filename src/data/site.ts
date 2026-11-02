@@ -7,7 +7,7 @@ export const site = {
   domain: 'alexanderdietz.eu',
   description: 'Alexander Dietz, PhD student at Erasmus MC and founder of mymun.',
   intro:
-    'PhD student at Erasmus MC, working on lung cancer screening: modelling smoking histories and risk to work out who should be eligible.',
+    'PhD student at Erasmus MC.',
 } as const;
 
 export type Item = {
@@ -31,8 +31,7 @@ export const sections: Section[] = [
       {
         name: 'LAPIN',
         href: 'https://health.ec.europa.eu/non-communicable-diseases/cancer/europes-beating-cancer-plan-eu4health-financed-projects/projects/lapin_en',
-        description:
-          'Lung cancer screening and prevention internationally. An EU4Health project under Europe’s Beating Cancer Plan.',
+        description: 'Lung cancer screening and prevention internationally.',
       },
     ],
   },
